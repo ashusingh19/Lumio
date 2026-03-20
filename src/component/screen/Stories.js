@@ -78,10 +78,10 @@ const Stories = () => {
           key={item.id}
           style={{ alignItems: 'center', marginRight: 12 }}
         >
-          <LinearGradient style={{padding:2,borderRadius:50}} colors={['yellow','orange','red']}>
+          <LinearGradient style={{padding:2,borderRadius:60,height:75,width:75,justifyContent:"center",alignSelf:"center"}} colors={['#FEDA75','#fa7e1e','#d62976','#962fbf']}>
              <Image
             source={item.img}
-            style={{ height: 72, width: 72, borderRadius: 50 }}
+            style={{ height: 70, width: 70, borderRadius: 50,borderWidth:4,color:"black" }}
           />
           </LinearGradient>
          

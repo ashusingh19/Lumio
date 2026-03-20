@@ -71,15 +71,15 @@ const Signup = ({navigation}) => {
               name = {showpassword? 'eye':'eye-with-line'}
               size={22}
                onPress={() => setshowpassword(!showpassword)}
-                style={{ marginLeft: 10 ,position:"absolute",right:40,top:28}}
+                style={{ marginLeft: 10 ,position:"absolute",right:60,top:26}}
               />
       </View>
       <TouchableOpacity 
-      onPress={( )=> navigation.navigate('Home')}
+      onPress={( )=> navigation.navigate('BottomTab')}
       >
         
-        <View style={{marginTop:35,backgroundColor:"#00bfff",paddingVertical:10,paddingHorizontal:10,borderRadius:10,width:310,marginLeft:20}}>
-        <Text style={{textAlign:"center",color:"white",fontWeight:600,fontSize:20}}>Sign up</Text>
+        <View style={{ marginTop:35,backgroundColor:"#00bfff",paddingVertical:10,paddingHorizontal:10,borderRadius:10,width:310,marginLeft:26}}>
+        <Text style={{ textAlign:"center",color:"white",fontWeight:600,fontSize:20}}>Sign up</Text>
         </View>
       </TouchableOpacity>
       <Text style={{fontSize:17,marginTop:10,textAlign:"center",alignItems:"center",marginLeft:10,marginRight:5}}>By signing up,you agree with our Term ,Data Policy and Cookies Policy</Text>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     // paddingVertical:15,
     width:310,
     height:47,
-    marginLeft:19,
+    marginLeft:26,
     fontSize:15
     
   }
