@@ -13,12 +13,11 @@ const Splashscreen = ({navigation}) => {
   return ()=> clearInterval(timer)
 },[navigation])
   return (
-   <View style={{flex:1 ,alignItems:"center",paddingTop:250}} >
-    <Image source={require('../../assets/image/Icon.png')}/>
-    <Text style={{color:"black",fontSize:56}}>Instagram</Text>
-    <Text style={{color:"black",fontSize:26}}>Followed by</Text>
-    <Text style={{color:"#008b8b",fontSize:56,marginBottom:56}}>meta</Text>
-
+   <View style={{flex:1 ,alignItems:"center",paddingTop:200}} >
+    <Image style={{width:300,height:350,}} source={require('../../assets/image/lumiocut.png')}/>
+    {/* <Text style={{color:"black",fontSize:56}}>Lumio</Text>
+    <Text style={{color:"grey",fontSize:23}}>CONNECT & SHARE</Text> */}
+    
    </View>
   )
 }

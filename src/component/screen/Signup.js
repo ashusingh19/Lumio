@@ -2,20 +2,75 @@ import { SafeAreaView, StyleSheet, Text, TextInput, View ,TouchableOpacity, Keyb
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Entypo'
 import { scale } from 'react-native-size-matters'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import API from "../../component/services/api";
 
 const Signup = ({navigation}) => {
   const[showpassword,setshowpassword] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [form, setform] =useState({
     email:'',
     username:'',
     password:'',
-    name:''
+    fullname:''
   })
+  const handleSignup = async () => {
+  try {
+     console.log("FORM =>", form);
+     console.log(JSON.stringify(form, null, 2));
+
+    if (
+      !form.username ||
+      !form.email ||
+      !form.fullname ||
+      !form.password
+    ) {
+      alert("All fields are required");
+      return;
+    }
+
+    setLoading(true);
+
+    const response = await API.post("/register", {
+      username: form.username,
+      email: form.email,
+      fullname: form.fullname,
+      password: form.password,
+    });
+
+    console.log("REGISTER SUCCESS =>", response.data);
+
+    await AsyncStorage.setItem(
+      "token",
+      response.data.token
+    );
+
+    await AsyncStorage.setItem(
+      "user",
+      JSON.stringify(response.data.user)
+    );
+
+    alert("Account Created Successfully");
+
+    navigation.replace("BottomTab");
+
+  } catch (error) {
+    console.log("REGISTER ERROR =>", error.response?.data);
+
+    alert(
+      error.response?.data?.message ||
+      error.message ||
+      "Registration Failed"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <SafeAreaView style={{flex:scale(1),backgroundColor:"#e6e8e8ff"}}>
       <KeyboardAvoidingView>
       <View>
-      <Text style={{fontSize:scale(45),fontWeight:700,marginTop:scale(70),justifyContent:"center",textAlign:"center"}}>Instagram</Text>
+      <Text style={{fontSize:scale(45),fontWeight:700,marginTop:scale(70),justifyContent:"center",textAlign:"center"}}>Lumio</Text>
       <Text style={{textAlign:"center",fontSize:scale(18),color:"grey"}}>Signup to see photos and videos from your friends</Text>
     </View>
     <TouchableOpacity>
@@ -33,7 +88,9 @@ const Signup = ({navigation}) => {
         autoCorrect={false}
         placeholderTextColor={"grey"}
         value={form.email}
-        onChangeText={email =>setform ({... form,email})}
+        onChangeText={(email) =>
+          setform 
+          ({... form,email})}
         />
       </View>
       <View>
@@ -43,8 +100,10 @@ const Signup = ({navigation}) => {
         autoCapitalize='none'
         autoCorrect={false}
         placeholderTextColor={"grey"}
-        value={form.name}
-        onChangeText={name =>setform ({... form,name})}
+        value={form.fullname}
+        onChangeText={(fullname) =>
+          setform
+           ({... form,fullname})}
         />
       </View>
        <View>
@@ -55,7 +114,9 @@ const Signup = ({navigation}) => {
         autoCorrect={false}
         placeholderTextColor={"grey"}
         value={form.username}
-        onChangeText={username =>setform ({... form,username})}
+        onChangeText={(username) =>
+          setform
+           ({... form,username})}
         />
       </View>
        <View style={{alignItems:"center",flexDirection:"row"}}>
@@ -65,7 +126,9 @@ const Signup = ({navigation}) => {
          secureTextEntry={!showpassword}
         placeholderTextColor={"grey"}
         value={form.password}
-        onChangeText={password =>setform ({... form,password})}
+        onChangeText={(password) =>
+          setform 
+          ({... form,password})}
         />
         <Icon 
               name = {showpassword? 'eye':'eye-with-line'}
@@ -75,11 +138,14 @@ const Signup = ({navigation}) => {
               />
       </View>
       <TouchableOpacity 
-      onPress={( )=> navigation.navigate('BottomTab')}
+     onPress={() => {
+  console.log("CURRENT FORM:", form);
+  handleSignup();
+}}
       >
         
         <View style={{ marginTop:35,backgroundColor:"#00bfff",paddingVertical:10,paddingHorizontal:10,borderRadius:10,width:310,marginLeft:26}}>
-        <Text style={{ textAlign:"center",color:"white",fontWeight:600,fontSize:20}}>Sign up</Text>
+        <Text style={{ textAlign:"center",color:"white",fontWeight:600,fontSize:20}}> {loading ? "Creating..." : "Sign Up"}</Text>
         </View>
       </TouchableOpacity>
       <Text style={{fontSize:17,marginTop:10,textAlign:"center",alignItems:"center",marginLeft:10,marginRight:5}}>By signing up,you agree with our Term ,Data Policy and Cookies Policy</Text>

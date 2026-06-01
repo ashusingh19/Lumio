@@ -2,19 +2,69 @@ import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, use
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Entypo'
 import { scale } from 'react-native-size-matters'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import API from "../.././component/services/api.js"; 
+
+
 
 const Login = ({navigation}) => {
 
   const [showpassword,setshowpassword] = useState(false)
+  const [loading,setLoading] = useState(false)
  const [form ,setform] = useState({
-  email:'',
+  username:'',
   password:'',
  });
+ const handleLogin = async () => {
+  try {
+    console.log("FORM DATA =>", form);
+    if (!form.username || !form.password) {
+      alert("All fields are required");
+      return;
+    }
+
+    setLoading(true);
+
+    const response = await API.post("/login", {
+      username: form.username,
+      password: form.password,
+    });
+
+    console.log("Success =>", response.data);
+
+    await AsyncStorage.setItem(
+      "token",
+      response.data.token
+    );
+
+    await AsyncStorage.setItem(
+      "user",
+      JSON.stringify(response.data.user)
+    );
+
+    alert("Login Successful");
+
+    navigation.replace("BottomTab");
+
+  } catch (error) {
+   console.log("FULL ERROR => ", error);
+   console.log("RESPONSE => ", error.response);
+   console.log("DATA => ", error.response?.data);
+
+   alert(
+      error.response?.data?.message ||
+      error.message ||
+      "Something went wrong"
+   );
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <SafeAreaView style={{backgroundColor:"#e0ffff ",flex:1}}>
     <View >
       {/* <Image style={{marginTop:165,alignItems:"center",justifyContent:"center"}} source={require("../../assets/image/Instagramlogo.png")}/> */}
-      <Text style={{color:"black",textAlign:"center",fontSize:scale(45),fontWeight:"bold",marginTop:scale(140), marginRight:scale(30),}}>Instagram</Text>
+      <Text style={{color:"black",textAlign:"center",fontSize:scale(45),fontWeight:"bold",marginTop:scale(140), marginRight:scale(30),}}>Lumio</Text>
        {/* <Icon name="instagram" size={45} style ={{justifyContent:"center",alignItems:"center",flexDirection:"column",marginLeft:100}} />  */}
 
     </View>
@@ -29,8 +79,8 @@ const Login = ({navigation}) => {
       autoCapitalize='none'
       autoCorrect={false}
       placeholderTextColor={"grey"}
-      value={form.email}
-      onChangeText={email =>setform ({...form,email})}
+      value={form.username}
+      onChangeText={(username)=> setform({...form,username})}
       
       
       />
@@ -43,7 +93,7 @@ const Login = ({navigation}) => {
       secureTextEntry={!showpassword} //if toggle password dikhega agr use state false means password hide
       placeholderTextColor={"grey"}
       value={form.password}
-      onChangeText={password =>setform ({...form,password})}
+      onChangeText={(password) =>setform ({...form,password})}
       />
       <Icon 
       name = {showpassword? 'eye':'eye-with-line'}
@@ -59,12 +109,12 @@ const Login = ({navigation}) => {
         <Text style={{marginBottom:scale(10),marginLeft:scale(210),color:"#00bfff"}}>Forget password ?</Text>
       </TouchableOpacity>
       <TouchableOpacity
-      onPress={()=> navigation.navigate('BottomTab')}
+      onPress={handleLogin}
       >
         <View style={styles.btn}
 
         >
-          <Text style={styles.btntext}>Login</Text>
+          <Text style={styles.btntext}> {loading ? "Loading..." : "Login"}</Text>
         </View>
       </TouchableOpacity>
     </View>
