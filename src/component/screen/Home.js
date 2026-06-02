@@ -8,6 +8,22 @@ import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 
 const Posts = [
+  {
+  id:1,
+  img:require("../../assets/image/Lumio.png"),
+  username: "Divine12",
+  likes:'1400',
+  comments:'852',
+  date:'2 days ago'
+},
+  {
+  id:11,
+  img:require("../../assets/image/cutlogo.png"),
+  username: "Divine12",
+  likes:'1400',
+  comments:'852',
+  date:'2 days ago'
+},
 {
   id:1,
   img:require("../../assets/image/butterflycofe.jpg"),
